@@ -1,0 +1,25 @@
+{
+  "name": "js-playground",
+  "version": "1.0.0",
+  "description": "A simple JS playground",
+  "scripts": {
+    "watch": "node ./scripts/watch.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegofrayo/js-playground.git"
+  },
+  "keywords": [
+    "javascript",
+    "playground"
+  ],
+  "author": "diegofrayo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diegofrayo/js-playground/issues"
+  },
+  "homepage": "https://github.com/diegofrayo/js-playground#readme",
+  "dependencies": {
+    "node-watch": "^0.7.3"
+  }
+}
