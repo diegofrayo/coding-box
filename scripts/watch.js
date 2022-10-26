@@ -9,11 +9,11 @@ watch(
   {
     recursive: true,
     filter(f, skip) {
-      if (/\/node_modules/.test(f) || /\.git/.test(f) || /\scripts/.test(f)) {
-        return skip;
+      if (f.startsWith("playground/") || f.startsWith("src/")) {
+        return /\.js$/.test(f);
       }
 
-      return /\.js$/.test(f);
+      return skip;
     },
   },
   function (evt, name) {

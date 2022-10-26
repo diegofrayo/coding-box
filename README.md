@@ -6,7 +6,7 @@ I just want to have a simple playground to run JS code and so I can do some expe
 
 ## Usage
 
-1. Create a JS file within the `playground` folder
+1. Create a JS file inside `/playground`
 1. The JS file just has to have this structure
     ```
     function main() {
@@ -17,5 +17,5 @@ I just want to have a simple playground to run JS code and so I can do some expe
 
     module.exports = main;
     ```
-1. Run `npm run watch`. This task executes a watcher that prints on the console the logs output of the any JS file updated or created within the `playground` folder
+1. Run `npm run watch`. This task executes a watcher that prints on the console the logs output of the any JS file updated or created inside `/playground`
 1. This is all!!
