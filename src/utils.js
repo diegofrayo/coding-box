@@ -9,9 +9,11 @@ function bold(content) {
 }
 
 function code(content) {
-  return `\`${
-    typeof content === "object" ? JSON.stringify(content) : content
-  }\``;
+  return `\`${printObject(content)}\``;
+}
+
+function printObject(content) {
+  return `${typeof content === "object" ? JSON.stringify(content) : content}`;
 }
 
 function createArray(length, start) {
@@ -25,4 +27,5 @@ module.exports = {
   code,
   createArray,
   insertLine,
+  printObject,
 };

@@ -1,4 +1,4 @@
-const { insertLine, bold, code } = require("../src/utils");
+const { insertLine, bold, code, printObject } = require("../src/utils");
 
 function main() {
   const splice = {
@@ -63,10 +63,15 @@ function logExample(input) {
   });
   output += insertLine(`- ${bold("Examples:")}`, { indent: 2 });
 
-  input.examples.forEach((example) => {
-    output += insertLine(`- ${bold("Method:")} ${code(example.method)}`, {
-      indent: 3,
-    });
+  input.examples.forEach((example, index) => {
+    output += insertLine(
+      `- ${bold(`Test ${index + 1}:`)} ${code(
+        `${printObject(example.originalInput)}${example.method}`
+      )}`,
+      {
+        indent: 3,
+      }
+    );
 
     output += insertLine(`- ${bold("Description:")} ${example.description}`, {
       indent: 4,
