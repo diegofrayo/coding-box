@@ -2,12 +2,12 @@ const fs = require("fs");
 const path = require("path");
 
 function insertLine(content, { indent = 0, breakLines = 1 } = {}) {
-  return `${generateIndent(indent)}${content}${createArray(breakLines)
+  return `${generateIndentation(indent)}${content}${createArray(breakLines)
     .map((i) => "\n")
     .join("")}`;
 }
 
-function generateIndent(indent) {
+function generateIndentation(indent) {
   return createArray(indent * 2)
     .map((i) => " ")
     .join("");
@@ -21,15 +21,17 @@ function code(content) {
   return `\`${toString(content)}\``;
 }
 
-function pre(content, indent = 0) {
-  return `\`\`\`${trim(toString(content))
+function pre(content, { indent = 0, withoutTemplateLiterals = false } = {}) {
+  const templateLiterals = withoutTemplateLiterals ? "" : `\`\`\``;
+
+  return `${templateLiterals}${content
+    .trim()
     .split("\n")
-    // .filter((line, index) => (index > 0 ? line.trim().length > 0 : true))
     .map(
-      (line) =>
-        `${line.trim().length === 0 ? "" : generateIndent(indent)}${line}`
+      (line, index) =>
+        `${index === 0 ? "" : generateIndentation(indent)}${line}`
     )
-    .join("\n")}\`\`\``;
+    .join("\n")}${templateLiterals}`;
 }
 
 function link(content) {
@@ -46,25 +48,64 @@ function createArray(length, start) {
   );
 }
 
-function trim(input) {
-  return input;
+function consoleLog(input) {
+  return `console.log(${input});`;
+}
+
+function comment(input) {
+  return `// ${toString(input)}`;
 }
 
 function writeOutput(fileName, content) {
-  fs.writeFileSync(
-    path.resolve("./output", `${fileName}.md`),
-    toString(content)
-  );
+  fs.writeFileSync(path.resolve("./output", `${fileName}`), toString(content));
+}
+
+function parseMethodCall(input) {
+  // TODO: Regex
+  const methodName = input
+    .substring(0, input.lastIndexOf("("))
+    .replace(".", "");
+  const methodParams = input
+    .substring(input.indexOf("(") + 1, input.lastIndexOf(")"))
+    .split(",")
+    .map((i) => {
+      return Number.isInteger(Number(i))
+        ? Number(i)
+        : replaceAll(i.trim(), '"', "");
+    });
+
+  return { methodName, methodParams };
+}
+
+function replaceAll(str, toReplace, replacement) {
+  if (Array.isArray(toReplace)) {
+    return toReplace.reduce(
+      (result, item) =>
+        result.replace(new RegExp(escapeRegExp(item), "g"), replacement),
+      str
+    );
+  }
+
+  return str.replace(new RegExp(escapeRegExp(toReplace), "g"), replacement);
 }
 
 module.exports = {
   bold,
   code,
+  comment,
+  consoleLog,
   createArray,
   insertLine,
   link,
+  parseMethodCall,
   pre,
+  replaceAll,
   toString,
-  trim,
   writeOutput,
 };
+
+// --- Utils ---
+
+function escapeRegExp(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}

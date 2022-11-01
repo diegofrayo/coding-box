@@ -43,9 +43,7 @@ watch(
 
 function loadFile(fileName) {
   const fileNamePath = path.resolve(fileName);
-
   delete require.cache[require.resolve(fileNamePath)];
-
   return require(fileNamePath);
 }
 

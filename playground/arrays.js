@@ -1,12 +1,4 @@
-const {
-  insertLine,
-  bold,
-  code,
-  link,
-  pre,
-  toString,
-  writeOutput,
-} = require("../src/utils");
+const Utils = require("../src/utils");
 
 function main() {
   const splice = {
@@ -22,67 +14,57 @@ splice(start)
 splice(start, deleteCount)
 splice(start, deleteCount, item1)
 splice(start, deleteCount, item1, item2, itemN)
-    `,
+`,
     examples: [
       {
         description: "delete all elements from a given start index",
         method: ".splice(1)",
         originalInput: getExampleArray(),
-        callback: (originalInput) => originalInput.splice(1),
       },
       {
         description: "delete one element (the second one)",
         method: ".splice(1, 1)",
         originalInput: getExampleArray(),
-        callback: (originalInput) => originalInput.splice(1, 1),
       },
       {
         description: "delete three elements (from the second one)",
         method: ".splice(1, 3)",
         originalInput: getExampleArray(),
-        callback: (originalInput) => originalInput.splice(1, 3),
       },
       {
         description: "insert one element after second element",
         method: `.splice(2, 0, "b.a")`,
         originalInput: getExampleArray(),
-        callback: (originalInput) => originalInput.splice(2, 0, "b.a"),
       },
       {
         description: "insert two elements after third elements",
         method: `.splice(3, 0, "c.a", "c.b")`,
         originalInput: getExampleArray(),
-        callback: (originalInput) => originalInput.splice(3, 0, "c.a", "c.b"),
       },
       {
-        description: "",
+        description: "firstIndex",
         method: `.splice(0)`,
         originalInput: getExampleArray(),
-        callback: (originalInput) => originalInput.splice(0),
       },
       {
-        description: "",
+        description: "lastIndex",
         method: `.splice(${getExampleArray().length - 1})`,
         originalInput: getExampleArray(),
-        callback: (originalInput) =>
-          originalInput.splice(originalInput.length - 1),
       },
       {
-        description: "",
+        description: "negativeIndex",
         method: `.splice(-1)`,
         originalInput: getExampleArray(),
-        callback: (originalInput) => originalInput.splice(-1),
       },
       {
-        description: "",
+        description: "indexOutOfBounds",
         method: `.splice(${getExampleArray().length})`,
         originalInput: getExampleArray(),
-        callback: (originalInput) => originalInput.splice(originalInput.length),
       },
     ],
   };
 
-  writeOutput(splice.method, logExample(splice));
+  Utils.writeOutput(splice.method + ".js", logExample(splice));
 }
 
 main();
@@ -98,47 +80,43 @@ function getExampleArray() {
 function logExample(input) {
   let output = ``;
 
-  output += insertLine(`# ${input.method}`, { breakLines: 2 });
-  output += insertLine(`- ${bold("Mutative:")} ${code(input.mutative)}`, {
-    indent: 0,
-  });
-  output += insertLine(`- ${bold("Description:")} ${input.description}`, {
-    indent: 0,
-  });
-  output += insertLine(`- ${bold("Docs:")} ${link(input.docs)}`, {
-    indent: 0,
-  });
-  output += insertLine(`- ${bold("Syntax:")}`, { indent: 0 });
-  output += insertLine(`${pre(input.syntax, 2)}`, { indent: 2 });
-  output += insertLine(`- ${bold("Examples:")}`, { indent: 0 });
+  output += Utils.insertLine(
+    `/*
+  - Mutative: ${input.mutative}
+  - Description: ${input.description}
+  - Docs: ${Utils.link(input.docs)}
+  - Syntax:
+    ${Utils.pre(input.syntax, {
+      indent: 2,
+      withoutTemplateLiterals: true,
+    })}
+*/`,
+    { breakLines: 2 }
+  );
 
   input.examples.forEach((example, index) => {
-    output += insertLine(
-      `- ${bold(`Test ${index + 1}:`)} ${code(
-        `${toString(example.originalInput)}${example.method}`
-      )}`,
-      {
-        indent: 1,
-      }
+    const inputName = `input${index + 1}`;
+
+    output += Utils.insertLine(Utils.comment(`{${example.description}}`), {
+      breakLines: 1,
+    });
+
+    output += Utils.insertLine(
+      `const ${inputName} = ${Utils.toString(example.originalInput)};`
     );
 
-    output += insertLine(`- ${bold("Description:")} ${example.description}`, {
-      indent: 2,
-    });
-    output += insertLine(`- ${bold("Input:")} ${code(example.originalInput)}`, {
-      indent: 2,
-    });
-    output += insertLine(
-      `- ${bold("Return:")} ${code(example.callback(example.originalInput))}`,
-      {
-        indent: 2,
-      }
+    const { methodName, methodParams } = Utils.parseMethodCall(example.method);
+    output += Utils.insertLine(
+      `${Utils.consoleLog(`${inputName}${example.method}`)} ${Utils.comment(
+        example.originalInput[methodName](...methodParams)
+      )}`
     );
-    output += insertLine(
-      `- ${bold("Mutated input:")} ${code(example.originalInput)}`,
-      {
-        indent: 2,
-      }
+
+    output += Utils.insertLine(
+      `${Utils.consoleLog(`${inputName}`)} ${Utils.comment(
+        example.originalInput
+      )}`,
+      { breakLines: index === input.examples.length - 1 ? 0 : 2 }
     );
   });
 

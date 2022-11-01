@@ -9,6 +9,8 @@ I just want to have a simple playground to run JS code and so I can do some expe
 1. Create a JS file inside `/playground`
 1. The JS file just has to have this structure
     ```
+    const Utils = require("../src/utils");
+
     function main() {
       console.log("Whatever you want!!!");
     }
@@ -16,6 +18,10 @@ I just want to have a simple playground to run JS code and so I can do some expe
     main();
 
     module.exports = main;
+
+    // --- Utils ---
+
+    function util() {}
     ```
 1. Run `npm run watch`. This task executes a watcher that prints on the console the logs output of the any JS file updated or created inside `/playground`
 1. This is all!!
