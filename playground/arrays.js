@@ -100,23 +100,24 @@ function logExample(input) {
     output += Utils.insertLine(Utils.comment(`{${example.description}}`), {
       breakLines: 1,
     });
-
     output += Utils.insertLine(
-      `const ${inputName} = ${Utils.toString(example.originalInput)};`
+      Utils.variable(inputName, Utils.toString(example.originalInput))
     );
 
     const { methodName, methodParams } = Utils.parseMethodCall(example.method);
+    console.log(methodName, methodParams);
     output += Utils.insertLine(
-      `${Utils.consoleLog(`${inputName}${example.method}`)} ${Utils.comment(
+      Utils.consoleLog(
+        `${inputName}${example.method}`,
         example.originalInput[methodName](...methodParams)
-      )}`
+      )
     );
 
     output += Utils.insertLine(
-      `${Utils.consoleLog(`${inputName}`)} ${Utils.comment(
-        example.originalInput
-      )}`,
-      { breakLines: index === input.examples.length - 1 ? 0 : 2 }
+      Utils.consoleLog(inputName, example.originalInput),
+      {
+        breakLines: index === input.examples.length - 1 ? 0 : 2,
+      }
     );
   });
 

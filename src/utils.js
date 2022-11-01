@@ -48,12 +48,16 @@ function createArray(length, start) {
   );
 }
 
-function consoleLog(input) {
-  return `console.log(${input});`;
+function consoleLog(input, output) {
+  return `console.log(${input}); ${output ? comment(output) : ""}`.trim();
 }
 
 function comment(input) {
   return `// ${toString(input)}`;
+}
+
+function variable(varName, varValue) {
+  return `const ${varName} = ${varValue};`;
 }
 
 function writeOutput(fileName, content) {
@@ -61,20 +65,22 @@ function writeOutput(fileName, content) {
 }
 
 function parseMethodCall(input) {
-  // TODO: Regex
-  const methodName = input
-    .substring(0, input.lastIndexOf("("))
-    .replace(".", "");
-  const methodParams = input
-    .substring(input.indexOf("(") + 1, input.lastIndexOf(")"))
-    .split(",")
-    .map((i) => {
+  const result = input
+    .match(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/)
+    ?.slice(1, 3);
+
+  if (!result) {
+    throw new Error("Error with " + input);
+  }
+
+  return {
+    methodName: result[0],
+    methodParams: result[1].split(",").map((i) => {
       return Number.isInteger(Number(i))
         ? Number(i)
         : replaceAll(i.trim(), '"', "");
-    });
-
-  return { methodName, methodParams };
+    }),
+  };
 }
 
 function replaceAll(str, toReplace, replacement) {
@@ -89,18 +95,24 @@ function replaceAll(str, toReplace, replacement) {
   return str.replace(new RegExp(escapeRegExp(toReplace), "g"), replacement);
 }
 
+function escapeString(input) {
+  return replaceAll(replaceAll(input, "\n", "\\n"), '"', "'");
+}
+
 module.exports = {
   bold,
   code,
   comment,
   consoleLog,
   createArray,
+  escapeString,
   insertLine,
   link,
   parseMethodCall,
   pre,
   replaceAll,
   toString,
+  variable,
   writeOutput,
 };
 

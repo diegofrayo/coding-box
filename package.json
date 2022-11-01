@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "A simple JS playground",
   "scripts": {
-    "watch": "node ./scripts/watch.js"
+    "watch": "node ./scripts/watch.js",
+    "format": "prettier \"./**/*.js\""
   },
   "repository": {
     "type": "git",
