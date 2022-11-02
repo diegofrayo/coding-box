@@ -8,91 +8,105 @@
 
 // {\: (backslash) to escape special characters}
 const regex1 = /a\.b/;
-console.log("a.b za.bz zabz".matchAll(/a\.b/g)); // [["a.b"],["a.b"]]
-console.log("aa.b b.c".matchAll(/a\.b/g)); // [["a.b"]]
-console.log("ab".matchAll(/a\.b/g)); // []
-console.log(".".matchAll(/a\.b/g)); // []
-console.log("43/ .34 drfr".matchAll(/a\.b/g)); // []
+console.log("123 a.b 123".matchAll(/a\.b/g)); // ✅ | [["a.b"]]
+console.log("a.b c a.b".matchAll(/a\.b/g)); // ✅ | [["a.b"],["a.b"]]
+console.log("a.b".matchAll(/a\.b/g)); // ✅ | [["a.b"]]
+console.log("aa.bb".matchAll(/a\.b/g)); // ✅ | [["a.b"]]
+console.log("".matchAll(/a\.b/g)); // ❌ | []
+console.log(" a*b ".matchAll(/a\.b/g)); // ❌ | []
+console.log("ab".matchAll(/a\.b/g)); // ❌ | []
+console.log(".".matchAll(/a\.b/g)); // ❌ | []
 
 // {\d: any digit between 0 and 9 | \d = [0-9]}
 const regex2 = /\d/;
-console.log("a.b za.bz zabz".matchAll(/\d/g)); // []
-console.log("aa.b b.c".matchAll(/\d/g)); // []
-console.log("ab".matchAll(/\d/g)); // []
-console.log(".".matchAll(/\d/g)); // []
-console.log("43/ .34 drfr".matchAll(/\d/g)); // [["4"],["3"],["3"],["4"]]
+console.log("1a2a3".matchAll(/\d/g)); // ✅ | [["1"],["2"],["3"]]
+console.log("a 3".matchAll(/\d/g)); // ✅ | [["3"]]
+console.log("3".matchAll(/\d/g)); // ✅ | [["3"]]
+console.log("".matchAll(/\d/g)); // ❌ | []
+console.log(" ".matchAll(/\d/g)); // ❌ | []
+console.log("r".matchAll(/\d/g)); // ❌ | []
 
-// {\w: (all word characters) a to z, A to Z, _ (underscore) | \w = [0-9a-zA-Z]}
-const regex3 = /[0-9a-zA-Z]/;
-console.log("5jhde2".matchAll(/[0-9a-zA-Z]/g)); // [["5"],["j"],["h"],["d"],["e"],["2"]]
-console.log("b--3".matchAll(/[0-9a-zA-Z]/g)); // [["b"],["3"]]
-console.log("aB.de- 3".matchAll(/[0-9a-zA-Z]/g)); // [["a"],["B"],["d"],["e"],["3"]]
-console.log(" _ _ dd_".matchAll(/[0-9a-zA-Z]/g)); // [["d"],["d"]]
-console.log("1A{][]}".matchAll(/[0-9a-zA-Z]/g)); // [["1"],["A"]]
-console.log("".matchAll(/[0-9a-zA-Z]/g)); // []
-console.log("^".matchAll(/[0-9a-zA-Z]/g)); // []
+// {\w: (All word characters => [a-z], [A-Z], [0-9], [_]}
+const regex3 = /^[\w]+$/;
+console.log("5jhdAe2".matchAll(/^[\w]+$/g)); // ✅ | [["5jhdAe2"]]
+console.log("_".matchAll(/^[\w]+$/g)); // ✅ | [["_"]]
+console.log("2".matchAll(/^[\w]+$/g)); // ✅ | [["2"]]
+console.log("sferwf".matchAll(/^[\w]+$/g)); // ✅ | [["sferwf"]]
+console.log("123_ddDE_Ad".matchAll(/^[\w]+$/g)); // ✅ | [["123_ddDE_Ad"]]
+console.log("123AAd frfr DFD".matchAll(/^[\w]+$/g)); // ❌ | []
+console.log("1A{][]}".matchAll(/^[\w]+$/g)); // ❌ | []
+console.log("b--$$$3".matchAll(/^[\w]+$/g)); // ❌ | []
+console.log("".matchAll(/^[\w]+$/g)); // ❌ | []
+console.log(" ".matchAll(/^[\w]+$/g)); // ❌ | []
+console.log("~!@#$%^&*()+".matchAll(/^[\w]+$/g)); // ❌ | []
 
 // {\s: (whitespaces)}
 const regex4 = /\s/;
-console.log("a.b za.bz zabz".matchAll(/\s/g)); // [[" "],[" "]]
-console.log("aa.b b.c".matchAll(/\s/g)); // [[" "]]
-console.log("ab".matchAll(/\s/g)); // []
-console.log(".".matchAll(/\s/g)); // []
-console.log("43/ .34 drfr".matchAll(/\s/g)); // [[" "],[" "]]
 
 // {\n: (line-breaks)}
 const regex5 = /\n/;
-console.log("fdd\ndd".matchAll(/\n/g)); // [["\n"]]
-console.log("aa .2bb.".matchAll(/\n/g)); // []
-console.log("".matchAll(/\n/g)); // []
-console.log(".".matchAll(/\n/g)); // []
 
 // {.: any single character}
 const regex6 = /./;
-console.log("fdddd".matchAll(/./g)); // [["f"],["d"],["d"],["d"],["d"]]
-console.log("aa .2bb.".matchAll(/./g)); // [["a"],["a"],[" "],["."],["2"],["b"],["b"],["."]]
-console.log("".matchAll(/./g)); // []
-console.log(".c".matchAll(/./g)); // [["."],["c"]]
-console.log("2".matchAll(/./g)); // [["2"]]
-console.log(" ".matchAll(/./g)); // [[" "]]
 
 // {.*: any single character (Zero or more of a, input has to start with a, it takes all)}
 const regex7 = /\d*/;
-console.log("123 343 kfjekjfre 9".matchAll(/\d*/g)); // [["123"],[""],["343"],[""],[""],[""],[""],[""],[""],[""],[""],[""],[""],[""],["9"],[""]]
-console.log("aa32 .2b".matchAll(/\d*/g)); // [[""],[""],["32"],[""],[""],["2"],[""],[""]]
-console.log("jfe-=-m".matchAll(/\d*/g)); // [[""],[""],[""],[""],[""],[""],[""],[""]]
-console.log(".c3".matchAll(/\d*/g)); // [[""],[""],["3"],[""]]
-console.log("2".matchAll(/\d*/g)); // [["2"],[""]]
-console.log("s 2".matchAll(/\d*/g)); // [[""],[""],["2"],[""]]
 
 // {.+: any single character (One or more of a, input does not have to start with a, it takes all)}
 const regex8 = /\d+/;
-console.log("123 343 kfjekjfre 9".matchAll(/\d+/g)); // [["123"],["343"],["9"]]
-console.log("aa32 .2b".matchAll(/\d+/g)); // [["32"],["2"]]
-console.log("jfe-=-m".matchAll(/\d+/g)); // []
-console.log(".c3".matchAll(/\d+/g)); // [["3"]]
-console.log("2".matchAll(/\d+/g)); // [["2"]]
-console.log("s 2".matchAll(/\d+/g)); // [["2"]]
 
-// {.?: any single character (Zero or one of a, input has to start with a, it takes only one match)}
+// {.?: any single character (Zero or one of a, input has to start with a, it takes only one match [smallest possible])}
 const regex9 = /\d?/;
-console.log("123 343 kfjekjfre 9".matchAll(/\d?/g)); // [["1"],["2"],["3"],[""],["3"],["4"],["3"],[""],[""],[""],[""],[""],[""],[""],[""],[""],[""],[""],["9"],[""]]
-console.log("aa32 .2b".matchAll(/\d?/g)); // [[""],[""],["3"],["2"],[""],[""],["2"],[""],[""]]
-console.log("jfe-=-m".matchAll(/\d?/g)); // [[""],[""],[""],[""],[""],[""],[""],[""]]
-console.log(".c3".matchAll(/\d?/g)); // [[""],[""],["3"],[""]]
-console.log("2".matchAll(/\d?/g)); // [["2"],[""]]
-console.log("s 2".matchAll(/\d?/g)); // [[""],[""],["2"],[""]]
 
 // {.splice}
 const regex10 = /\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/;
-console.log(".splice(1)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // [[".splice(1)","splice","1",null,null]]
-console.log(".splice(1, 1)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // [[".splice(1, 1)","splice","1, 1",", 1",null]]
-console.log(".splice(1, 3)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // [[".splice(1, 3)","splice","1, 3",", 3",null]]
-console.log(".splice(2, 0, 'b.a')".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // [[".splice(2, 0, \"b.a\")","splice","2, 0, \"b.a\"",", 0",", \"b.a\""]]
-console.log(".splice(3, 0, 'c.a', 'c.b')".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // [[".splice(3, 0, \"c.a\", \"c.b\")","splice","3, 0, \"c.a\", \"c.b\"",", 0",", \"c.a\", \"c.b\""]]
-console.log(".splice(-1, 3)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // [[".splice(-1, 3)","splice","-1, 3",", 3",null]]
-console.log(".splice(-1, -3)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // [[".splice(-1, -3)","splice","-1, -3",", -3",null]]
-console.log(".splice(1, -3)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // [[".splice(1, -3)","splice","1, -3",", -3",null]]
-console.log(".splice(-1)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // [[".splice(-1)","splice","-1",null,null]]
-console.log(".splice()".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // []
+console.log(".splice(1)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // ✅ | [[".splice(1)","splice","1",null,null]]
+console.log(".splice(1, 1)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // ✅ | [[".splice(1, 1)","splice","1, 1",", 1",null]]
+console.log(".splice(1, 3)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // ✅ | [[".splice(1, 3)","splice","1, 3",", 3",null]]
+console.log(".splice(2, 0, 'b.a')".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // ✅ | [[".splice(2, 0, \"b.a\")","splice","2, 0, \"b.a\"",", 0",", \"b.a\""]]
+console.log(".splice(3, 0, 'c.a', 'c.b')".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // ✅ | [[".splice(3, 0, \"c.a\", \"c.b\")","splice","3, 0, \"c.a\", \"c.b\"",", 0",", \"c.a\", \"c.b\""]]
+console.log(".splice(-1, 3)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // ✅ | [[".splice(-1, 3)","splice","-1, 3",", 3",null]]
+console.log(".splice(-1, -3)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // ✅ | [[".splice(-1, -3)","splice","-1, -3",", -3",null]]
+console.log(".splice(1, -3)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // ✅ | [[".splice(1, -3)","splice","1, -3",", -3",null]]
+console.log(".splice(-1)".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // ✅ | [[".splice(-1)","splice","-1",null,null]]
+console.log(".splice()".matchAll(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/g)); // ❌ | []
+
+// {{exact}: [Example => Colombian phone number]}
+const regex11 = /^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/;
+console.log("3113728898".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ✅ | [["3113728898",null]]
+console.log("311-372-8898".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ✅ | [["311-372-8898",null]]
+console.log("311 372 8898".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ✅ | [["311 372 8898",null]]
+console.log("+57 3113728898".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ✅ | [["+57 3113728898","+57 "]]
+console.log("+57 311-372-8898".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ✅ | [["+57 311-372-8898","+57 "]]
+console.log("+57 311 372 8898".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ✅ | [["+57 311 372 8898","+57 "]]
+console.log("311372 8898".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ❌ | [["311372 8898",null]]
+console.log("311372-8898".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ❌ | [["311372-8898",null]]
+console.log("311372889".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ❌ | []
+console.log("4113728898".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ❌ | []
+console.log("3113728898s".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ❌ | []
+console.log("311-372-8898-".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ❌ | []
+console.log("+57311-372-8898".matchAll(/^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/g)); // ❌ | []
+
+// {{min,max}: [Example => Zip code with numbers and its length between 3 and 6]}
+const regex12 = /^\d{3,6}$/;
+console.log("123456".matchAll(/^\d{3,6}$/g)); // ✅ | [["123456"]]
+console.log("12345".matchAll(/^\d{3,6}$/g)); // ✅ | [["12345"]]
+console.log("1234".matchAll(/^\d{3,6}$/g)); // ✅ | [["1234"]]
+console.log("123".matchAll(/^\d{3,6}$/g)); // ✅ | [["123"]]
+console.log("1234567".matchAll(/^\d{3,6}$/g)); // ❌ | []
+console.log("12345c".matchAll(/^\d{3,6}$/g)); // ❌ | []
+console.log("12".matchAll(/^\d{3,6}$/g)); // ❌ | []
+
+// {{min,}: Length equals or greater than min}
+const regex13 = /^\d{3,}$/;
+console.log("12345".matchAll(/^\d{3,}$/g)); // ✅ | [["12345"]]
+console.log("1234".matchAll(/^\d{3,}$/g)); // ✅ | [["1234"]]
+console.log("123".matchAll(/^\d{3,}$/g)); // ✅ | [["123"]]
+console.log("123c".matchAll(/^\d{3,}$/g)); // ❌ | []
+console.log("12".matchAll(/^\d{3,}$/g)); // ❌ | []
+
+// {{min,max}: [Example => Password with digits, lowercase and uppercase letters and some special characters]}
+const regex14 = /([A-Z]+[a-z]+\d+)/;
+console.log("Diego123".matchAll(/([A-Z]+[a-z]+\d+)/g)); // ✅ | [["Diego123","Diego123"]]
+console.log("123diegoRayo".matchAll(/([A-Z]+[a-z]+\d+)/g)); // ❌ | []
 

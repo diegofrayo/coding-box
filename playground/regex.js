@@ -3,64 +3,204 @@ const Utils = require("../src/utils");
 function main() {
   const baseExamples = [
     {
+      enabled: true,
       description: `\\: (backslash) to escape special characters`,
       regex: /a\.b/,
-      inputs: ["a.b za.bz zabz", "aa.b b.c", "ab", ".", "43/ .34 drfr"],
+      inputs: [
+        { input: "123 a.b 123", shouldMatch: true },
+        { input: "a.b c a.b", shouldMatch: true },
+        { input: "a.b", shouldMatch: true },
+        { input: "aa.bb", shouldMatch: true },
+
+        { input: "", shouldMatch: false },
+        { input: " a*b ", shouldMatch: false },
+        { input: "ab", shouldMatch: false },
+        { input: ".", shouldMatch: false },
+      ],
     },
     {
+      enabled: true,
       description: `\\d: any digit between 0 and 9 | \\d = [0-9]`,
       regex: /\d/,
-      inputs: ["a.b za.bz zabz", "aa.b b.c", "ab", ".", "43/ .34 drfr"],
+      inputs: [
+        { input: "1a2a3", shouldMatch: true },
+        { input: "a 3", shouldMatch: true },
+        { input: "3", shouldMatch: true },
+
+        { input: "", shouldMatch: false },
+        { input: " ", shouldMatch: false },
+        { input: "r", shouldMatch: false },
+      ],
     },
     {
-      description: `\\w: (all word characters) a to z, A to Z, _ (underscore) | \\w = [0-9a-zA-Z]`,
-      regex: /[0-9a-zA-Z]/,
-      inputs: ["5jhde2", "b--3", "aB.de- 3", " _ _ dd_", "1A{][]}", "", "^"],
+      enabled: true,
+      description: `\\w: (All word characters => [a-z], [A-Z], [0-9], [_]`,
+      regex: /^[\w]+$/,
+      inputs: [
+        { input: "5jhdAe2", shouldMatch: true },
+        { input: "_", shouldMatch: true },
+        { input: "2", shouldMatch: true },
+        { input: "sferwf", shouldMatch: true },
+        { input: "123_ddDE_Ad", shouldMatch: true },
+
+        { input: "123AAd frfr DFD", shouldMatch: false },
+        { input: "1A{][]}", shouldMatch: false },
+        { input: "b--$$$3", shouldMatch: false },
+        { input: "", shouldMatch: false },
+        { input: " ", shouldMatch: false },
+        { input: "~!@#$%^&*()+", shouldMatch: false },
+      ],
     },
     {
+      enabled: true,
       description: `\\s: (whitespaces)`,
       regex: /\s/,
-      inputs: ["a.b za.bz zabz", "aa.b b.c", "ab", ".", "43/ .34 drfr"],
+      inputs: [
+        // { input: "a.b za.bz zabz", shouldMatch: true },
+        // { input: "aa.b b.c", shouldMatch: true },
+        // { input: "ab", shouldMatch: true },
+        // { input: ".", shouldMatch: true },
+        // { input: "43/ .34 drfr", shouldMatch: true },
+      ],
     },
     {
+      enabled: true,
       description: `\\n: (line-breaks)`,
       regex: /\n/,
-      inputs: ["fdd\ndd", "aa .2bb.", "", "."],
+      inputs: [
+        // { input: "fdd\ndd", shouldMatch: true },
+        // { input: "aa .2bb.", shouldMatch: true },
+        // { input: "", shouldMatch: true },
+        // { input: ".", shouldMatch: true },
+      ],
     },
     {
+      enabled: true,
       description: `.: any single character`,
       regex: /./,
-      inputs: ["fdddd", "aa .2bb.", "", ".c", "2", " "],
+      inputs: [
+        // { input: "fdddd", shouldMatch: true },
+        // { input: "aa .2bb.", shouldMatch: true },
+        // { input: "", shouldMatch: true },
+        // { input: ".c", shouldMatch: true },
+        // { input: "2", shouldMatch: true },
+        // { input: " ", shouldMatch: true },
+      ],
     },
     {
+      enabled: true,
       description: `.*: any single character (Zero or more of a, input has to start with a, it takes all)`,
       regex: /\d*/,
-      inputs: ["123 343 kfjekjfre 9", "aa32 .2b", "jfe-=-m", ".c3", "2", "s 2"],
+      inputs: [
+        // { input: "123 343 kfjekjfre 9", shouldMatch: true },
+        // { input: "aa32 .2b", shouldMatch: true },
+        // { input: "jfe-=-m", shouldMatch: true },
+        // { input: ".c3", shouldMatch: true },
+        // { input: "2", shouldMatch: true },
+        // { input: "s 2", shouldMatch: true },
+      ],
     },
     {
+      enabled: true,
       description: `.+: any single character (One or more of a, input does not have to start with a, it takes all)`,
       regex: /\d+/,
-      inputs: ["123 343 kfjekjfre 9", "aa32 .2b", "jfe-=-m", ".c3", "2", "s 2"],
+      inputs: [
+        // { input: "123 343 kfjekjfre 9", shouldMatch: true },
+        // { input: "aa32 .2b", shouldMatch: true },
+        // { input: "jfe-=-m", shouldMatch: true },
+        // { input: ".c3", shouldMatch: true },
+        // { input: "2", shouldMatch: true },
+        // { input: "s 2", shouldMatch: true },
+      ],
     },
     {
-      description: `.?: any single character (Zero or one of a, input has to start with a, it takes only one match)`,
+      enabled: true,
+      description: `.?: any single character (Zero or one of a, input has to start with a, it takes only one match [smallest possible])`,
       regex: /\d?/,
-      inputs: ["123 343 kfjekjfre 9", "aa32 .2b", "jfe-=-m", ".c3", "2", "s 2"],
+      inputs: [
+        // { input: "123 343 kfjekjfre 9", shouldMatch: true },
+        // { input: "aa32 .2b", shouldMatch: true },
+        // { input: "jfe-=-m", shouldMatch: true },
+        // { input: ".c3", shouldMatch: true },
+        // { input: "2", shouldMatch: true },
+        // { input: "s 2", shouldMatch: true },
+      ],
     },
     {
+      enabled: true,
       description: `.splice`,
       regex: /\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/,
       inputs: [
-        `.splice(1)`,
-        `.splice(1, 1)`,
-        `.splice(1, 3)`,
-        `.splice(2, 0, "b.a")`,
-        `.splice(3, 0, "c.a", "c.b")`,
-        `.splice(-1, 3)`,
-        `.splice(-1, -3)`,
-        `.splice(1, -3)`,
-        `.splice(-1)`,
-        `.splice()`,
+        { input: ".splice(1)", shouldMatch: true },
+        { input: ".splice(1, 1)", shouldMatch: true },
+        { input: ".splice(1, 3)", shouldMatch: true },
+        { input: '.splice(2, 0, "b.a")', shouldMatch: true },
+        { input: '.splice(3, 0, "c.a", "c.b")', shouldMatch: true },
+        { input: ".splice(-1, 3)", shouldMatch: true },
+        { input: ".splice(-1, -3)", shouldMatch: true },
+        { input: ".splice(1, -3)", shouldMatch: true },
+        { input: ".splice(-1)", shouldMatch: true },
+        { input: ".splice()", shouldMatch: true },
+      ],
+    },
+    {
+      enabled: true,
+      description: `{exact}: [Example => Colombian phone number]`,
+      regex: /^(\+57 )?3\d{2}[-, ]?\d{3}[-, ]?\d{4}$/,
+      inputs: [
+        { input: "3113728898", shouldMatch: true },
+        { input: "311-372-8898", shouldMatch: true },
+        { input: "311 372 8898", shouldMatch: true },
+        { input: "+57 3113728898", shouldMatch: true },
+        { input: "+57 311-372-8898", shouldMatch: true },
+        { input: "+57 311 372 8898", shouldMatch: true },
+
+        { input: "311372 8898", shouldMatch: false }, // TODO: It should not match
+        { input: "311372-8898", shouldMatch: false }, // TODO: It should not match
+        { input: "311372889", shouldMatch: false },
+        { input: "4113728898", shouldMatch: false },
+        { input: "3113728898s", shouldMatch: false },
+        { input: "311-372-8898-", shouldMatch: false },
+        { input: "+57311-372-8898", shouldMatch: false },
+      ],
+    },
+    {
+      enabled: true,
+      description: `{min,max}: [Example => Zip code with numbers and its length between 3 and 6]`,
+      regex: /^\d{3,6}$/,
+      inputs: [
+        { input: "123456", shouldMatch: true },
+        { input: "12345", shouldMatch: true },
+        { input: "1234", shouldMatch: true },
+        { input: "123", shouldMatch: true },
+
+        { input: "1234567", shouldMatch: false },
+        { input: "12345c", shouldMatch: false },
+        { input: "12", shouldMatch: false },
+      ],
+    },
+    {
+      enabled: true,
+      description: `{min,}: Length equals or greater than min`,
+      regex: /^\d{3,}$/,
+      inputs: [
+        { input: "12345", shouldMatch: true },
+        { input: "1234", shouldMatch: true },
+        { input: "123", shouldMatch: true },
+
+        { input: "123c", shouldMatch: false },
+        { input: "12", shouldMatch: false },
+      ],
+    },
+    {
+      enabled: true,
+      description: `{min,max}: [Example => Password with digits, lowercase and uppercase letters and some special characters]`,
+      regex: /([A-Z]+[a-z]+\d+)/,
+      // TODO: This regex does not work yet \!\@\#\$\%\^\&\*
+      inputs: [
+        { input: "Diego123", shouldMatch: true },
+
+        { input: "123diegoRayo", shouldMatch: false },
       ],
     },
   ];
@@ -74,6 +214,7 @@ function main() {
     `,
     outputFile: "test",
   });
+
   logSearchExamples(baseExamples, {
     enabled: true,
     variant: "match",
@@ -84,6 +225,7 @@ function main() {
     `,
     outputFile: "match",
   });
+
   logSearchExamples(baseExamples, {
     enabled: true,
     variant: "matchWithGlobalFlag",
@@ -94,6 +236,7 @@ function main() {
     `,
     outputFile: "match-g-flag",
   });
+
   logSearchExamples(baseExamples, {
     enabled: true,
     variant: "matchAll",
@@ -105,6 +248,7 @@ function main() {
     `,
     outputFile: "match-all",
   });
+
   logSearchExamples(baseExamples, {
     enabled: true,
     variant: "exec",
@@ -117,11 +261,12 @@ function main() {
     outputFile: "exec",
   });
 
-  // Make some examples:
-  // {min, max}
-  // {exact}
-  // {min,} // min to infinite
-  // [xa\d\w]? existe o no
+  // TODO
+  // - Clean up the Regex note
+  // - Update and enable all examples
+  // - Difference between () and []
+  // - Difference between [c,a] and (c|a)
+  // - Finish TODOs
 
   // Issues:
   // .match \d?g empty strings returned weird (it's a normal behaviours because it is zero or more)
@@ -130,7 +275,7 @@ function main() {
   // .exec \d*g get into a infinite loop
 
   // Material:
-  // https://platzi.com/clases/1301-expresiones-regulares/11854-el-caso-de-como-delimitador/
+  // https://platzi.com/clases/1301-expresiones-regulares/11855-not-su-uso-y-sus-peligros/
   // https://www.notion.so/diegofrayo/Regex-2c0e37844b7f4b70b181204519e33a95
   // https://rubular.com/
   // https://cheatography.com/davechild/cheat-sheets/regular-expressions/
@@ -164,14 +309,15 @@ function logTestExamples(
     output += Utils.insertLine(`// {${example.description}}`);
     output += Utils.insertLine(Utils.variable(regexName, example.regex));
 
-    example.inputs.forEach((input) => {
-      const inputEscaped = Utils.escapeString(input);
+    example.inputs.forEach((item) => {
+      const inputEscaped = Utils.escapeString(item.input);
+      const matched = example.regex.test(item.input);
 
       output += Utils.insertLine(
-        `${Utils.consoleLog(
+        Utils.consoleLog(
           `${example.regex}.test("${inputEscaped}")`,
-          example.regex.test(input)
-        )} `
+          `${matched && item.shouldMatch ? "✅" : "❌"} | ${matched}`
+        )
       );
     });
 
@@ -209,31 +355,42 @@ function logSearchExamples(
     output += Utils.insertLine(`// {${example.description}}`);
     output += Utils.insertLine(Utils.variable(regexName, example.regex));
 
-    example.inputs.forEach((input) => {
-      const inputEscaped = Utils.escapeString(input);
+    example.inputs.forEach((item) => {
+      const inputEscaped = Utils.escapeString(item.input);
       const regex =
         isMatchWithGlobalVariant || isMatchAllVariant || isExecVariant
           ? new RegExp(example.regex, "g")
           : example.regex;
 
       if (isExecVariant) {
+        const result = execRegex(regex, item.input);
+
         output += Utils.insertLine(
           Utils.consoleLog(
             `${regex}.exec("${inputEscaped}")`,
-            Utils.toString(execRegex(regex, input))
+            `${
+              result.length > 0 && item.shouldMatch ? "✅" : "❌"
+            } | ${Utils.toString(result)}`
           )
         );
       } else {
+        const result = isMatchAllVariant
+          ? matchAllRegex(item.input.matchAll(regex))
+          : item.input.match(regex);
+
         output += Utils.insertLine(
           Utils.consoleLog(
             `"${inputEscaped}".${
               isMatchAllVariant ? "matchAll" : "match"
             }(${regex})`,
-            Utils.toString(
-              isMatchAllVariant
-                ? matchAllRegex(input.matchAll(regex))
-                : input.match(regex)
-            )
+            `${
+              (result === null && item.shouldMatch === false) ||
+              (Array.isArray(result) &&
+                result.length > 0 &&
+                item.shouldMatch === true)
+                ? "✅"
+                : "❌"
+            } | ${Utils.toString(result)}`
           )
         );
       }
