@@ -5,22 +5,22 @@ function main() {
     {
       description: `\\: (backslash) to escape special characters`,
       regex: /a\.b/,
-      inputs: ["a.b", "aa.bb.", "ab"],
+      inputs: ["a.b za.bz zabz", "aa.b b.c", "ab", ".", "43/ .34 drfr"],
     },
     {
       description: `\\d: any digit between 0 and 9 | \\d = [0-9]`,
       regex: /\d/,
-      inputs: ["1a.b", "aa.2bb.", "ab"],
+      inputs: ["a.b za.bz zabz", "aa.b b.c", "ab", ".", "43/ .34 drfr"],
     },
     {
       description: `\\w: (all word characters) a to z, A to Z, _ (underscore) | \\w = [0-9a-zA-Z]`,
       regex: /[0-9a-zA-Z]/,
-      inputs: ["5", "b", "G", "1a", "aB", "1A", "1A{][]}", "", "^"],
+      inputs: ["5jhde2", "b--3", "aB.de- 3", " _ _ dd_", "1A{][]}", "", "^"],
     },
     {
       description: `\\s: (whitespaces)`,
       regex: /\s/,
-      inputs: ["1a.b", "aa .2bb.", "", "."],
+      inputs: ["a.b za.bz zabz", "aa.b b.c", "ab", ".", "43/ .34 drfr"],
     },
     {
       description: `\\n: (line-breaks)`,
@@ -35,17 +35,17 @@ function main() {
     {
       description: `.*: any single character (Zero or more of a, input has to start with a, it takes all)`,
       regex: /\d*/,
-      inputs: ["123 343 kfjekjfre 9", "aa32 .2bb.", "23", ".c3", "2", "s 2"],
+      inputs: ["123 343 kfjekjfre 9", "aa32 .2b", "jfe-=-m", ".c3", "2", "s 2"],
     },
     {
       description: `.+: any single character (One or more of a, input does not have to start with a, it takes all)`,
       regex: /\d+/,
-      inputs: ["123 d 343 hf 9", "aa32 .2bb.", "23", ".c3 jd3", "2", "s 2"],
+      inputs: ["123 343 kfjekjfre 9", "aa32 .2b", "jfe-=-m", ".c3", "2", "s 2"],
     },
     {
       description: `.?: any single character (Zero or one of a, input has to start with a, it takes only one match)`,
       regex: /\d?/,
-      inputs: ["123 d 343 hf 9", "aa32 .2bb.", "23", ".c3 jd3", "2", "s 2"],
+      inputs: ["123 343 kfjekjfre 9", "aa32 .2b", "jfe-=-m", ".c3", "2", "s 2"],
     },
     {
       description: `.splice`,
@@ -60,38 +60,77 @@ function main() {
         `.splice(-1, -3)`,
         `.splice(1, -3)`,
         `.splice(-1)`,
+        `.splice()`,
       ],
-      resultExtractor(matches, match) {
-        return match ? `${Utils.toString(matches.slice(1, 3))}` : matches;
-      },
     },
   ];
 
-  logTestExamples(baseExamples);
-  logSearchExamples(baseExamples, { match: true });
-  logSearchExamples(baseExamples, { matchWithGlobal: true });
-  logSearchExamples(baseExamples, { matchAll: true });
-  logSearchExamples(baseExamples, { exec: true });
+  logTestExamples(baseExamples, {
+    enabled: true,
+    title: ".test",
+    documentation: `
+      - Return: boolean
+      - Docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
+    `,
+    outputFile: "test",
+  });
+  logSearchExamples(baseExamples, {
+    enabled: true,
+    variant: "match",
+    title: ".match",
+    documentation: `
+      - Return: ["firstMatchFound"] | ["the first complete match and its related capturing groups are returned"] | null
+      - Docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/@@match#return_value
+    `,
+    outputFile: "match",
+  });
+  logSearchExamples(baseExamples, {
+    enabled: true,
+    variant: "matchWithGlobalFlag",
+    title: ".match [g flag]",
+    documentation: `
+      - Return: ["all matches"] | ["the first complete match but no its related capturing groups"] | null
+      - Docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/@@match#return_value
+    `,
+    outputFile: "match-g-flag",
+  });
+  logSearchExamples(baseExamples, {
+    enabled: true,
+    variant: "matchAll",
+    title: ".matchAll",
+    documentation: `
+      - Note: The regex passed must have the "g" flag, otherwise, an error is thrown
+      - Return: RegExpStringIterator => ["all matches"] | ["the first complete match and its related capturing groups are returned"] | []
+      - Docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll
+    `,
+    outputFile: "match-all",
+  });
+  logSearchExamples(baseExamples, {
+    enabled: true,
+    variant: "exec",
+    title: ".exec",
+    documentation: `
+      - Note: The regex passed must have the "g" flag, otherwise, you could get into a infinite loop
+      - Return: The same as ".matchAll", but each item found is an array with some useful properties like "index"
+      - Docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec
+    `,
+    outputFile: "exec",
+  });
 
-  // Review results so far:
-  // document methods return
-  // match: Returns an array with all captouring groups. I just need [1] index
-  // matchGlobal: Returns an array with the whole match string
-  // matchAll: the same as matchGlobal
-  // exec: ???
-
-  // Then:
+  // Make some examples:
   // {min, max}
   // {exact}
   // {min,} // min to infinite
   // [xa\d\w]? existe o no
 
   // Issues:
-  // .match \d?g empty strings returned weird
-  // .match \d*g empty strings returned weird
+  // .match \d?g empty strings returned weird (it's a normal behaviours because it is zero or more)
+  // .match \d*g empty strings returned weird (it's a normal behaviours because it is zero or more)
+  // .exec \d?g get into a infinite loop
+  // .exec \d*g get into a infinite loop
 
   // Material:
-  // https://platzi.com/clases/1301-expresiones-regulares/11852-los-delimitadores/
+  // https://platzi.com/clases/1301-expresiones-regulares/11854-el-caso-de-como-delimitador/
   // https://www.notion.so/diegofrayo/Regex-2c0e37844b7f4b70b181204519e33a95
   // https://rubular.com/
   // https://cheatography.com/davechild/cheat-sheets/regular-expressions/
@@ -103,8 +142,21 @@ module.exports = main;
 
 // --- Utils ---
 
-function logTestExamples(examples) {
-  let output = Utils.insertLine(`// ### ".test" examples ###`);
+function logTestExamples(
+  examples,
+  { enabled = false, title, documentation, outputFile } = {}
+) {
+  if (!enabled) return;
+
+  let output = ``;
+
+  output += Utils.insertLine(`// ### "${title}" examples ###`, {
+    breakLines: 2,
+  });
+  output += Utils.insertLine(`/*${documentation}*/`, {
+    breakLines: 2,
+    deleteIndentation: 1,
+  });
 
   examples.forEach((example, index) => {
     const regexName = `regex${index + 1}`;
@@ -128,34 +180,31 @@ function logTestExamples(examples) {
 
   console.log(output);
 
-  Utils.writeOutput("regex-test.js", output);
+  Utils.writeOutput(`regex-${outputFile}.js`, output);
 }
 
 function logSearchExamples(
   examples,
-  {
-    match = false,
-    matchWithGlobal = false,
-    matchAll = false,
-    exec = false,
-  } = {}
+  { enabled = false, variant, title, documentation, outputFile } = {}
 ) {
-  let output = Utils.insertLine(
-    `// ### ${
-      exec
-        ? ".exec"
-        : `.match${matchWithGlobal ? "(withGlobal) " : matchAll ? "All" : ""}`
-    } examples ###`,
-    { breakLines: 2 }
-  );
+  if (!enabled) return;
+
+  const isMatchWithGlobalVariant = variant === "matchWithGlobalFlag";
+  const isMatchAllVariant = variant === "matchAll";
+  const isExecVariant = variant === "exec";
+
+  let output = ``;
+
+  output += Utils.insertLine(`// ### "${title}" examples ###`, {
+    breakLines: 2,
+  });
+  output += Utils.insertLine(`/*${documentation}*/`, {
+    breakLines: 2,
+    deleteIndentation: 1,
+  });
 
   examples.forEach((example, index) => {
     const regexName = `regex${index + 1}`;
-    const resultExtractor =
-      example.resultExtractor ||
-      ((matches) => {
-        return matches;
-      });
 
     output += Utils.insertLine(`// {${example.description}}`);
     output += Utils.insertLine(Utils.variable(regexName, example.regex));
@@ -163,39 +212,27 @@ function logSearchExamples(
     example.inputs.forEach((input) => {
       const inputEscaped = Utils.escapeString(input);
       const regex =
-        matchWithGlobal || matchAll || exec
+        isMatchWithGlobalVariant || isMatchAllVariant || isExecVariant
           ? new RegExp(example.regex, "g")
           : example.regex;
 
-      if (exec) {
+      if (isExecVariant) {
         output += Utils.insertLine(
           Utils.consoleLog(
             `${regex}.exec("${inputEscaped}")`,
-            Utils.toString(
-              resultExtractor(
-                execRegex(regex, input),
-                match,
-                matchWithGlobal,
-                matchAll,
-                exec
-              )
-            )
+            Utils.toString(execRegex(regex, input))
           )
         );
       } else {
         output += Utils.insertLine(
           Utils.consoleLog(
-            `"${inputEscaped}".${matchAll ? "matchAll" : "match"}(${regex})`,
+            `"${inputEscaped}".${
+              isMatchAllVariant ? "matchAll" : "match"
+            }(${regex})`,
             Utils.toString(
-              resultExtractor(
-                matchAll
-                  ? [...input.matchAll(regex)].map((i) => i[0])
-                  : input.match(regex),
-                match,
-                matchWithGlobal,
-                matchAll,
-                exec
-              )
+              isMatchAllVariant
+                ? matchAllRegex(input.matchAll(regex))
+                : input.match(regex)
             )
           )
         );
@@ -207,29 +244,22 @@ function logSearchExamples(
 
   console.log(output);
 
-  Utils.writeOutput(
-    `regex${
-      matchWithGlobal
-        ? "-match-global"
-        : matchAll
-        ? "-match-all"
-        : exec
-        ? "-exec"
-        : "-match"
-    }.js`,
-    output
-  );
+  Utils.writeOutput(`regex-${outputFile}.js`, output);
 }
 
 function execRegex(regex, input) {
   const finalResult = [];
   let execResult = regex.exec(input);
 
+  // NOTE: I check this "execResult[0]" to avoid getting a infinite loop, I don't understand the cause yet
   while (execResult && execResult[0]) {
-    finalResult.push({ match: execResult[0], index: execResult.index });
+    finalResult.push(execResult);
     execResult = regex.exec(input);
-    console.log(execResult);
   }
 
   return finalResult;
+}
+
+function matchAllRegex(result) {
+  return [...result];
 }

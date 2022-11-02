@@ -1,10 +1,27 @@
 const fs = require("fs");
 const path = require("path");
 
-function insertLine(content, { indent = 0, breakLines = 1 } = {}) {
-  return `${generateIndentation(indent)}${content}${createArray(breakLines)
+function insertLine(
+  content,
+  { indent = 0, breakLines = 1, deleteIndentation = 0 } = {}
+) {
+  const line = `${generateIndentation(indent)}${content}${createArray(
+    breakLines
+  )
     .map((i) => "\n")
     .join("")}`;
+
+  if (deleteIndentation === 0) {
+    return line;
+  }
+
+  return `${replaceAll(
+    line,
+    createArray(deleteIndentation)
+      .map((i) => "  ")
+      .join(""),
+    ""
+  )}`;
 }
 
 function generateIndentation(indent) {
@@ -49,7 +66,9 @@ function createArray(length, start) {
 }
 
 function consoleLog(input, output) {
-  return `console.log(${input}); ${output ? comment(output) : ""}`.trim();
+  return `console.log(${input}); ${
+    output !== undefined ? comment(output) : ""
+  }`.trim();
 }
 
 function comment(input) {
