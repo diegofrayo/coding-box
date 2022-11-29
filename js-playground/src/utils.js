@@ -83,25 +83,6 @@ function writeOutput(fileName, content) {
   fs.writeFileSync(path.resolve("./output", `${fileName}`), toString(content));
 }
 
-function parseMethodCall(input) {
-  const result = input
-    .match(/\.([a-z]{1,15})\((-?\d(, -?\d){0,1}(, ".*"){0,})\)/)
-    ?.slice(1, 3);
-
-  if (!result) {
-    throw new Error("Error with " + input);
-  }
-
-  return {
-    methodName: result[0],
-    methodParams: result[1].split(",").map((i) => {
-      return Number.isInteger(Number(i))
-        ? Number(i)
-        : replaceAll(i.trim(), '"', "");
-    }),
-  };
-}
-
 function replaceAll(str, toReplace, replacement) {
   if (Array.isArray(toReplace)) {
     return toReplace.reduce(
@@ -127,7 +108,6 @@ module.exports = {
   escapeString,
   insertLine,
   link,
-  parseMethodCall,
   pre,
   replaceAll,
   toString,
