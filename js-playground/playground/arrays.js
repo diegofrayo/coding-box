@@ -47,6 +47,7 @@ function main() {
             () => originalInput.filter((element) => element !== "a"),
             originalInput,
           ],
+          originalInput,
         };
       },
       {
@@ -85,6 +86,7 @@ function main() {
             () => (originalInput[0] = "firstElement"),
             originalInput,
           ],
+          originalInput,
         };
       },
       () => {
@@ -190,13 +192,6 @@ function getExampleArray() {
 
 function logExample(input) {
   let output = ``;
-
-  output += Utils.insertLine(
-    `/*
-* --- ${input.description} ---
-*/`,
-    { breakLines: 2 }
-  );
 
   input.examples.forEach((exampleInput, index) => {
     const inputName = `input${index + 1}`;

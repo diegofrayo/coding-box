@@ -1,7 +1,3 @@
-/*
-* --- Subsets ---
-*/
-
 // Description: {Subset with a given start and end}
 // Mutative: {false}
 const input1 = ["a","b","c","d","e"];

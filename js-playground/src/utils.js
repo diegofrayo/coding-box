@@ -55,8 +55,14 @@ function link(content) {
   return `[${content.text}](${content.url})`;
 }
 
-function toString(content) {
-  return `${typeof content === "object" ? JSON.stringify(content) : content}`;
+function toString(content, withQuotes = false) {
+  return `${
+    typeof content === "object"
+      ? JSON.stringify(content)
+      : typeof content === "string" && withQuotes
+      ? `"${content}"`
+      : content
+  }`;
 }
 
 function createArray(length, start) {
@@ -65,14 +71,14 @@ function createArray(length, start) {
   );
 }
 
-function consoleLog(input, output) {
+function consoleLog(input, output, withQuotes = true) {
   return `console.log(${input}); ${
-    output !== undefined ? comment(output) : ""
+    output !== undefined ? comment(output, withQuotes) : ""
   }`.trim();
 }
 
-function comment(input) {
-  return `// ${toString(input)}`;
+function comment(input, withQuotes) {
+  return `// ${toString(input, withQuotes)}`;
 }
 
 function variable(varName, varValue) {

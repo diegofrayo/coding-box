@@ -1,7 +1,3 @@
-/*
-* --- Mutatives ---
-*/
-
 // Description: {sort}
 // Mutative: {true}
 const input1 = ["e","d","c","b","a"];

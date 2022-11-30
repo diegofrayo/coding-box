@@ -1,7 +1,3 @@
-/*
-* --- Adding elements ---
-*/
-
 // Description: {add element at the end of the array}
 // Mutative: {false}
 const input1 = ["a","b","c","d","e"];

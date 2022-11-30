@@ -1,12 +1,8 @@
-/*
-* --- Updating elements ---
-*/
-
 // Description: {Update by index}
 // Mutative: {true}
-const input1 = undefined;
-console.log(input1[0] = "firstElement"); // firstElement
-console.log(input1);
+const input1 = ["a","b","c","d","e"];
+console.log(input1[0] = "firstElement"); // "firstElement"
+console.log(input1); // ["firstElement","b","c","d","e"]
 
 // Description: {Update by value}
 // Mutative: {false}

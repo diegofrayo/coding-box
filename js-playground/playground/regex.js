@@ -316,7 +316,8 @@ function logTestExamples(
       output += Utils.insertLine(
         Utils.consoleLog(
           `${example.regex}.test("${inputEscaped}")`,
-          `${matched && item.shouldMatch ? "✅" : "❌"} | ${matched}`
+          `${matched && item.shouldMatch ? "✅" : "❌"} | ${matched}`,
+          false
         )
       );
     });
@@ -370,7 +371,8 @@ function logSearchExamples(
             `${regex}.exec("${inputEscaped}")`,
             `${
               result.length > 0 && item.shouldMatch ? "✅" : "❌"
-            } | ${Utils.toString(result)}`
+            } | ${Utils.toString(result)}`,
+            false
           )
         );
       } else {
@@ -390,7 +392,8 @@ function logSearchExamples(
                 item.shouldMatch === true)
                 ? "✅"
                 : "❌"
-            } | ${Utils.toString(result)}`
+            } | ${Utils.toString(result)}`,
+            false
           )
         );
       }
