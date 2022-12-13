@@ -3,13 +3,11 @@ const path = require("path");
 
 function insertLine(
   content,
-  { indent = 0, breakLines = 1, deleteIndentation = 0 } = {}
+  { indent = 0, breakLines = 1, deleteIndentation = 0, topBreakLines = 0 } = {}
 ) {
-  const line = `${generateIndentation(indent)}${content}${createArray(
-    breakLines
-  )
-    .map((i) => "\n")
-    .join("")}`;
+  const line = `${generateBreakLines(topBreakLines)}${generateIndentation(
+    indent
+  )}${content}${generateBreakLines(breakLines)}`;
 
   if (deleteIndentation === 0) {
     return line;
@@ -22,6 +20,12 @@ function insertLine(
       .join(""),
     ""
   )}`;
+}
+
+function generateBreakLines(breakLines) {
+  return createArray(breakLines)
+    .map((i) => "\n")
+    .join("");
 }
 
 function generateIndentation(indent) {
