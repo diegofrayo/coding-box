@@ -1,50 +1,61 @@
-function fromZeroToNumber1(number, array) {
-  if (number === 0) {
-    array.push(number);
-    return number;
+function fromZeroToNumberWithLoops(number) {
+  const result = [];
+
+  for (let index = 0; index <= number; index++) {
+    result.push(index);
   }
 
-  fromZeroToNumber1(number - 1, array);
-  array.push(number);
-
-  return number;
+  return result;
 }
 
-let array = [];
-log("fromZeroToNumber1", fromZeroToNumber1, [5, array], array);
+log("fromZeroToNumberWithLoops", fromZeroToNumberWithLoops, [5]);
 
-// --- --- --- ---
-
-function fromZeroToNumber2(number, array) {
+function fromZeroToNumber(number, array) {
   if (number === 0) {
-    array.push(number);
     return [number];
   }
 
-  fromZeroToNumber2(number - 1, array);
-  array.push(number);
-
-  return array;
+  return array.concat([...fromZeroToNumber(number - 1, array), number]);
 }
 
-log("fromZeroToNumber2", fromZeroToNumber2, [5, []]);
+log("fromZeroToNumber", fromZeroToNumber, [5, []]);
 
 // --- --- --- ---
 
+function sumWithLoops(number) {
+  let result = 0;
+
+  for (let index = 0; index <= number; index++) {
+    result += index;
+  }
+
+  return result;
+}
+
+log("sumWithLoops", sumWithLoops, [5]);
+
 function sum(number) {
-  if (number === 1) {
+  if (number === 0) {
     return number;
   }
 
   return sum(number - 1) + number;
 }
 
-log("sum", sum, [6]);
+log("sum", sum, [5]);
 
 // --- --- --- ---
 
+function printWithLoops(number) {
+  for (let index = 0; index <= number; index++) {
+    console.log(index);
+  }
+}
+
+log("printWithLoops", printWithLoops, [5]);
+
 function print(number) {
-  if (number === 1) {
+  if (number === 0) {
     console.log(number);
     return;
   }
@@ -57,10 +68,18 @@ log("print", print, [5]);
 
 // --- --- --- ---
 
+function printInvertedWithLoops(number) {
+  for (let index = number; index >= 0; index--) {
+    console.log(index);
+  }
+}
+
+log("printInvertedWithLoops", printInvertedWithLoops, [5]);
+
 function printInverted(number) {
   console.log(number);
 
-  if (number === 1) {
+  if (number === 0) {
     return;
   }
 
@@ -71,19 +90,66 @@ log("printInverted", printInverted, [5]);
 
 // --- --- --- ---
 
+function numberOfDigitsWithLoops(number) {
+  let counter = number === 0 ? 1 : 0;
+
+  while (number > 0) {
+    number = (number - (number % 10)) / 10;
+    counter++;
+  }
+
+  return counter;
+}
+
+log("numberOfDigitsWithLoops", numberOfDigitsWithLoops, [
+  [5],
+  [0],
+  [1],
+  [9],
+  [10],
+  [11],
+  [1000],
+  [100100],
+]);
+
 function numberOfDigits(number) {
   if (number < 10) {
     return 1;
   }
 
-  return numberOfDigits(number / 10) + 1;
+  return numberOfDigits((number - (number % 10)) / 10) + 1;
 }
 
-log("numberOfDigits", numberOfDigits, [133]);
+log("numberOfDigits", numberOfDigits, [
+  [5],
+  [0],
+  [1],
+  [9],
+  [10],
+  [11],
+  [1000],
+  [100100],
+]);
 
 // --- --- --- ---
 
+function factorialWithLoops(number) {
+  let result = number === 0 ? 0 : 1;
+
+  for (let index = 1; index <= number; index++) {
+    result *= index;
+  }
+
+  return result;
+}
+
+log("factorialWithLoops", factorialWithLoops, [[5], [0], [1], [3], [4]]);
+
 function factorial(number) {
+  if (number === 0) {
+    return 0;
+  }
+
   if (number === 1) {
     return 1;
   }
@@ -91,39 +157,83 @@ function factorial(number) {
   return factorial(number - 1) * number;
 }
 
-log("factorial", factorial, [7]);
+log("factorial", factorial, [[5], [0], [1], [3], [4]]);
 
 // --- --- --- ---
 
-function pow(base, exp) {
-  if (exp <= 1) {
-    return base * exp;
+function powWithLoops(base, pow) {
+  let result = 1;
+
+  for (let index = 1; index <= pow; index++) {
+    result *= base;
   }
 
-  return base * pow(base, exp - 1);
+  return result;
 }
 
-log("pow", pow, [2, 5]);
+log("powWithLoops", powWithLoops, [
+  [2, 0],
+  [2, 1],
+  [2, 2],
+  [2, 3],
+  [2, 4],
+]);
+
+function pow(base, powNumber) {
+  if (powNumber === 0) {
+    return 1;
+  }
+
+  return pow(base, powNumber - 1) * base;
+}
+
+log("pow", pow, [
+  [2, 0],
+  [2, 1],
+  [2, 2],
+  [2, 3],
+  [2, 4],
+]);
 
 // --- --- --- ---
 
-function reverseNum(num) {
-  if (num < 10) {
-    return num + "";
+function reverseNumberWithLoops(number) {
+  let result = number === 0 ? number : "";
+
+  while (number > 0) {
+    result += number % 10;
+    number = (number - (number % 10)) / 10;
   }
 
-  return (num % 10) + reverseNum((num - (num % 10)) / 10);
+  return result;
 }
 
-log("reverseNum", reverseNum, [
-  [1030],
-  [1],
-  [20],
-  [10],
+log("reverseNumberWithLoops", reverseNumberWithLoops, [
   [0],
-  [10003],
-  [10000],
+  [1],
+  [10],
   [1010],
+  [10000],
+  [10003464],
+]);
+
+function reverseNumber(number) {
+  if (number < 10) {
+    return number + "";
+  }
+
+  const result = number % 10;
+
+  return result + reverseNumber((number - (number % 10)) / 10);
+}
+
+log("reverseNumber", reverseNumber, [
+  [0],
+  [1],
+  [10],
+  [1010],
+  [10000],
+  [10003464],
 ]);
 
 // --- --- --- ---
@@ -132,35 +242,42 @@ function fibonacciWithLoops(number) {
   let a = 0;
   let b = 1;
   let c = 0;
-  let result = "";
+  let i = 0;
 
-  for (let index = 0; index < number; index++) {
+  while (i < number) {
     c = a + b;
     b = a;
     a = c;
-    result += c + " ";
+    i++;
   }
 
-  return result;
+  return c;
 }
 
-log("fibonacciWithLoops", fibonacciWithLoops, [7]);
+log("fibonacciWithLoops", fibonacciWithLoops, [
+  [0],
+  [1],
+  [2],
+  [3],
+  [4],
+  [5],
+  [6],
+  [7],
+]);
+// 0, 1, 1, 2, 3, 5, 8, 13
 
-// --- --- --- ---
-
-function fibonacciSimple(n) {
-  if (n < 2) {
-    return n;
+function fibonacci(number, index = 0, a = 0, b = 1) {
+  if (index === number) {
+    return a;
   }
 
-  return fibonacciSimple(n - 1) + fibonacciSimple(n - 2);
+  return fibonacci(number, ++index, a + b, a);
 }
 
-log("fibonacciSimple", fibonacciSimple, [7]);
+log("fibonacci", fibonacci, [[0], [1], [2], [3], [4], [5], [6], [7]]);
+// 0, 1, 1, 2, 3, 5, 8, 13
 
-// --- --- --- ---
-
-function fibonacciWithRecursion(input) {
+function fibonacciFirstVersion(input) {
   function innerFn(input1, input2, currentIteration, input) {
     let a = input1;
     let b = input2;
@@ -178,7 +295,13 @@ function fibonacciWithRecursion(input) {
   return innerFn(0, 1, 1, input);
 }
 
-log("fibonacciWithRecursion", fibonacciWithRecursion, [7]);
+function fibonacciFromInternet(n) {
+  if (n < 2) {
+    return n;
+  }
+
+  return fibonacciFromInternet(n - 1) + fibonacciFromInternet(n - 2);
+}
 
 // --- Utils ---
 
@@ -207,5 +330,3 @@ function isArrayOfArray(array) {
     Array.isArray(array) && array.filter(Array.isArray).length === array.length
   );
 }
-
-// Some examples: https://aulaenlanube.com/zona-programacion/java/ejercicios-recursividad-java
