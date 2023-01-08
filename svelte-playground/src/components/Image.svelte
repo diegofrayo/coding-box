@@ -8,7 +8,7 @@
 	});
 </script>
 
-<img src="/photo.png" class={`image ${filter}`.trim()} alt="Joy the last creation" />
+<img src="/photo.jpeg" class={`image ${filter}`.trim()} alt="Profile" />
 
 <svg>
 	<filter id="custom-filter-wavy">
