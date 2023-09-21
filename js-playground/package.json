@@ -1,10 +1,10 @@
 {
   "name": "js-playground",
   "version": "1.0.0",
-  "description": "A simple JS playground",
+  "private": true,
   "scripts": {
-    "watch": "node ./scripts/watch.js",
-    "format": "prettier \"./**/*.js\""
+    "watch": "node ./src/watch.js",
+    "format": "prettier \"./src/**/*.js\" \"./.output/*.js\" --write"
   },
   "repository": {
     "type": "git",

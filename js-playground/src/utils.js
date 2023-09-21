@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
+// --- OUTPUT FORMATTING ---
+
 function insertLine(
   content,
   { indent = 0, breakLines = 1, deleteIndentation = 0, topBreakLines = 0 } = {}
@@ -16,7 +18,7 @@ function insertLine(
   return `${replaceAll(
     line,
     createArray(deleteIndentation)
-      .map((i) => "  ")
+      .map(i => "  ")
       .join(""),
     ""
   )}`;
@@ -24,13 +26,13 @@ function insertLine(
 
 function generateBreakLines(breakLines) {
   return createArray(breakLines)
-    .map((i) => "\n")
+    .map(i => "\n")
     .join("");
 }
 
 function generateIndentation(indent) {
   return createArray(indent * 2)
-    .map((i) => " ")
+    .map(i => " ")
     .join("");
 }
 
@@ -59,22 +61,6 @@ function link(content) {
   return `[${content.text}](${content.url})`;
 }
 
-function toString(content, withQuotes = false) {
-  return `${
-    typeof content === "object"
-      ? JSON.stringify(content)
-      : typeof content === "string" && withQuotes
-      ? `"${content}"`
-      : content
-  }`;
-}
-
-function createArray(length, start) {
-  return Array.from(Array(length).keys()).map(
-    (value) => value + (start === undefined ? 1 : start)
-  );
-}
-
 function consoleLog(input, output, withQuotes = true) {
   return `console.log(${input}); ${
     output !== undefined ? comment(output, withQuotes) : ""
@@ -89,9 +75,17 @@ function variable(varName, varValue) {
   return `const ${varName} = ${varValue};`;
 }
 
-function writeOutput(fileName, content) {
-  fs.writeFileSync(path.resolve("./output", `${fileName}`), toString(content));
+function toString(content, withQuotes = false) {
+  return `${
+    typeof content === "object"
+      ? JSON.stringify(content)
+      : typeof content === "string" && withQuotes
+      ? `"${content}"`
+      : content
+  }`;
 }
+
+// --- STRINGS ---
 
 function replaceAll(str, toReplace, replacement) {
   if (Array.isArray(toReplace)) {
@@ -109,6 +103,18 @@ function escapeString(input) {
   return replaceAll(replaceAll(input, "\n", "\\n"), '"', "'");
 }
 
+// --- MISC ---
+
+function createArray(length, start) {
+  return Array.from(Array(length).keys()).map(
+    value => value + (start === undefined ? 1 : start)
+  );
+}
+
+function writeOutput(fileName, content) {
+  fs.writeFileSync(path.resolve("./output", `${fileName}`), toString(content));
+}
+
 module.exports = {
   bold,
   code,
@@ -122,10 +128,10 @@ module.exports = {
   replaceAll,
   toString,
   variable,
-  writeOutput,
+  writeOutput
 };
 
-// --- Utils ---
+// --- INTERNALS ---
 
 function escapeRegExp(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
