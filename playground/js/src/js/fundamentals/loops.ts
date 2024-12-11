@@ -29,20 +29,20 @@ iterateArray2([]);
 
 // --- UTILS ---
 
-function iterateObject(object) {
-  for (key in object) {
-    console.log(key, "=>", object[key]);
-  }
+function iterateObject(object?: unknown) {
+	for (key in object) {
+		console.log(key, "=>", object[key]);
+	}
 }
 
 function iterateArray1(array) {
-  for (key in array) {
-    console.log(key, "=>", array[key]);
-  }
+	for (key in array) {
+		console.log(key, "=>", array[key]);
+	}
 }
 
 function iterateArray2(array) {
-  for (value of array) {
-    console.log(value);
-  }
+	for (value of array) {
+		console.log(value);
+	}
 }
