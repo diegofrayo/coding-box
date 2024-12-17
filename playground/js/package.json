@@ -1,14 +1,14 @@
 {
-	"name": "js-playground",
+	"name": "coding-box",
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
-		"watch": "tsx watch ./src/**/*.ts",
+		"watch": "tsx watch --include \"./src/**/*.ts\" ./src/index.ts",
 		"format": "prettier \"./src/**/*.js\" \"./.output/*.js\" --write"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/diegofrayo/js-playground.git"
+		"url": "git+https://github.com/diegofrayo/coding-box.git"
 	},
 	"keywords": [
 		"javascript",
@@ -18,9 +18,9 @@
 	"author": "diegofrayo",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/diegofrayo/js-playground/issues"
+		"url": "https://github.com/diegofrayo/coding-box/issues"
 	},
-	"homepage": "https://github.com/diegofrayo/js-playground#readme",
+	"homepage": "https://github.com/diegofrayo/coding-box#readme",
 	"dependencies": {
 		"axios": "^1.2.2",
 		"dayjs": "^1.11.7"

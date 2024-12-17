@@ -1,4 +1,4 @@
-# js-playground
+# coding-box
 
 ## Motivation
 

@@ -22,5 +22,3 @@ function base64Encode() {
 
 	return base64;
 }
-
-const ootuput;
