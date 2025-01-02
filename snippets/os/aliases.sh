@@ -1,0 +1,6 @@
+alias nrd='npm run dev'
+alias gp='git pull'
+alias gs='git status'
+alias gdev='git switch dev && git pull'
+alias gnb='git switch -c'
+alias gsb='git switch'
